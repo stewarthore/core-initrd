@@ -7,3 +7,6 @@ debian/files
 *.snap
 *.img
 .spread-reuse*.yaml
+.idea/
+debian/debhelper-build-stamp
+vendor/plymouth-theme-ubuntu-core

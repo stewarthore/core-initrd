@@ -1,3 +1,9 @@
+ubuntu-core-initramfs (69ubuntu1) UNRELEASED; urgency=medium
+
+  * Improve cross-build support
+
+ -- Stewart Hore <stewart.hore@canonical.com>  Thu, 28 Aug 2025 14:13:01 +1000
+
 ubuntu-core-initramfs (69) oracular; urgency=medium
 
   * Add systemd-cryptsetup, which is now a separate package, and libkmod2.

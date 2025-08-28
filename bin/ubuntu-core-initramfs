@@ -378,9 +378,8 @@ def install_systemd_files(dest_dir, sysroot):
     shutil.rmtree(os.path.join(dest_dir, "usr/lib/udev/hwdb.d"))
 
 
-def install_busybox(dest_dir, sysroot):
-    install_file_to_path("/usr/lib/initramfs-tools/bin/busybox", dest_dir,
-                         "usr/bin/busybox", sysroot)
+def install_busybox(dest_dir, sysroot, busybox: pathlib.Path | None = None):
+    install_file_to_path(file=busybox, dest_dir, "/usr/bin/busybox",sysroot)
     # Commands we want for busybox (static for more control and to help
     # with cross-building).
     cmds = ["[", "[[", "acpid", "arch", "ascii", "ash", "awk", "base32", "basename",
@@ -706,7 +705,7 @@ def create_initrd(parser, args):
         # copy busybox first so we get already the shell interpreter we
         # want (busybox) instead of dracut-install pulling the systemd
         # default (dash) when it pulls a shell script later.
-        install_busybox(main, rootfs)
+        install_busybox(main, rootfs, args.busybox)
         # Copy systemd bits
         install_systemd_files(main, rootfs)
         # Other miscelanea stuff
@@ -916,6 +915,12 @@ def main():
             ["uname", "-r"], universal_newlines=True
         ).strip()
     )
+    initrd_parser.add_argument(
+        "--busybox",
+        help="path to busybox",
+        type=pathlib.Path, default="/usr/lib/initramfs-tools/bin/busybox",
+    )
+    args = parser.parse_args()
 
     args = parser.parse_args()
     if args.subcmd == "create-initrd" and not args.features:
